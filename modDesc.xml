@@ -1,8 +1,39 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <modDesc descVersion="96">
+    <!-- Author/Version -->
     <author>Riverbend Mod Team</author>
-    <version>1.0.0</version>
+    <version>1.0.0.12</version>
+
+    <!-- Mod title and description -->
     <title>FieldBinder</title>
-    <description><![CDATA[Modular logger for FS25]]></description>
+    <description>
+        <![CDATA[
+        FieldBinder is a modular data logger and operations tracker for Farming Simulator 25.
+        This version logs owned field sizes and statuses (crop, growth, fertilizer, etc.) to modSettings/FieldBinder/field_sizes.txt and field_sizes.csv
+        ]]>
+    </description>
+
+    <!-- Optional mod icon shown in-game -->
     <iconFilename>icon_FieldBinder.dds</iconFilename>
+
+    <!-- Lua source files for the mod -->
+    <extraSourceFiles>
+        <sourceFile filename="scripts/FieldBinder.lua" />
+        <sourceFile filename="core/FieldBinderLogger.lua" />
+        <sourceFile filename="core/FieldBinderUtils.lua" />
+    </extraSourceFiles>
+
+    <!-- Leave empty if the mod doesn't register new vehicle specializations -->
+    <specializations />
+    
+    <!-- Leave empty unless you're adding input actions -->
+    <inputBindings />
+
+    <!-- Localization block for translated text entries -->
+    <l10n />
+
+    <!-- Register in-game console commands -->
+    <consoleCommands>
+        <command name="fbWriteFieldSizes" functionName="FieldBinderLogger.writeFieldSizes" className="FieldBinder" />
+    </consoleCommands>
 </modDesc>
