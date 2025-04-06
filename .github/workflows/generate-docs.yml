@@ -1,0 +1,39 @@
+name: Generate Documentation
+
+on:
+  push:
+    branches:
+      - main  # Adjust if your default branch is named differently
+
+jobs:
+  generate-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set Up Lua and Luarocks
+        uses: leafo/gh-actions-lua@v10
+        with:
+          luaVersion: "5.1"  # Adjust based on your project's Lua version
+
+      - name: Install LDoc
+        run: luarocks install ldoc
+
+      - name: Generate Documentation
+        run: ldoc -c .ldoc .
+
+      - name: Upload Documentation as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: Documentation
+          path: docs/  # Adjust if your .ldoc config specifies a different output directory
+
+      # Optional: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main'  # Deploy only on pushes to main
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/  # Adjust if your .ldoc config specifies a different output directory
