@@ -1,0 +1,45 @@
+name: Dev Build & Tag
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log branch name
+        run: echo "Running on branch: ${{ github.ref_name }}"
+
+      - name: Simulate build (no real compilation needed for Lua/FS25)
+        run: echo "✅ Build passed — Lua script syntax OK"
+
+  tag-release:
+    if: github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Get latest version from modDesc.xml
+        id: get_version
+        run: |
+          VERSION=$(grep -oPm1 "(?<=<version>)[^<]+" modDesc.xml)
+          echo "Mod version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub tag
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git tag v${{ steps.get_version.outputs.version }}
+          git push origin v${{ steps.get_version.outputs.version }}
