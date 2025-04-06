@@ -6,6 +6,11 @@ FieldBinderLogger = {}
 -- Import utility module
 source(g_currentModDirectory .. "core/FieldBinderUtils.lua")
 
+--- Writes owned field data to TXT and CSV files in modSettings/FieldBinder.
+-- @function FieldBinderLogger.writeFieldSizes
+-- @desc Collects data for all owned fields and logs size, crop type, and field condition layers (e.g., fertilized, plowed, weeds).
+-- @usage Called at mission start or via console command "fbWriteFieldSizes"
+-- @return nil
 function FieldBinderLogger.writeFieldSizes()
     -- Setup modSettings output path and filename based on map name
     local modSettingsPath = getUserProfileAppPath() .. "modSettings/FieldBinder/"
@@ -30,9 +35,11 @@ function FieldBinderLogger.writeFieldSizes()
     file:write("====================================================================================================================================================================\n")
     file:write("Field Index | Field ID        | Hectares | Acres   | Crop     | Growth | Fertilized     | Plowed | Limed | Weeds       | Roller | Stones | Stubble | Mulched | Tillage\n")
     file:write("--------------------------------------------------------------------------------------------------------------------------------------------------------------------\n")
-    csv:write("field_index,field_id,hectares,acres,crop,growth,fert_type,fert_level,plowed,limed,weeds,roller,stones,stubble_shred,mulched,tillage_state\n")
+    csv:write("FieldIndex,FieldID,Hectares,Acres,Crop,Growth,FertType,FertLevel,Plowed,Limed,Weeds,Roller,Stones,StubbleShred,Mulched,TillageState\n")
 
     -- Loop through all fields on the map
+    -- g_fieldManager.fields is a table where each key is the numeric field index and each value is a field object.
+    -- Each field object typically contains attributes like name, areaHa (hectares), fieldState (a structure with growth, crop, spray, tillage status), and farmland reference.
     for fieldIndex, field in pairs(g_fieldManager.fields) do
         if field.farmland and field.farmland.isOwned then
             -- Basic metadata
@@ -100,7 +107,12 @@ function FieldBinderLogger.writeFieldSizes()
 
             file:write(txtLine)
             csv:write(csvLine)
-            print("[FieldBinder] CSV line:", csvLine)
+
+            -- Debug print toggle (set this to true to enable console logging)
+            local debugMode = false
+            if debugMode then
+                print("[FieldBinder] CSV line:", csvLine)
+            end
         end
     end
 
