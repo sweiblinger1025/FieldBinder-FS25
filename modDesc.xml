@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<modDesc descVersion="96">
+    <author>YourName</author>
+    <version>1.0.0.0</version>
+    <title>FieldBinder</title>
+    <description>
+        <![CDATA[
+        FieldBinder is a modular data logger and operations tracker for Farming Simulator 25.
+        This version logs owned field sizes to modSettings/FieldBinder/field_sizes_<MapName>.txt
+        ]]>
+    </description>
+    <iconFilename>icon.dds</iconFilename>
+
+    <extraSourceFiles>
+        <sourceFile filename="scripts/FieldBinder.lua" />
+    </extraSourceFiles>
+
+    <consoleCommands>
+        <command name="fbWriteFieldSizes" functionName="writeFieldSizes" className="FieldBinder" />
+    </consoleCommands>
+</modDesc>
