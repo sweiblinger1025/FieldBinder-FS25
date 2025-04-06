@@ -1,0 +1,5 @@
+project = "FieldBinder"
+title = "FieldBinder Mod Documentation"
+description = [[Modular field logger and planner for FS25.]]
+file = {"scripts", "core"}
+style = "!"
