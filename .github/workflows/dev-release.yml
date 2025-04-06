@@ -43,3 +43,19 @@ jobs:
           git config user.email "actions@github.com"
           git tag v${{ steps.get_version.outputs.version }}
           git push origin v${{ steps.get_version.outputs.version }}
+
+  changelog:
+    if: github.ref == 'refs/heads/main'
+    needs: tag-release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Generate changelog
+        uses: heinrichreimer/github-changelog-generator-action@v2.2
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          user: ${{ github.repository_owner }}
+          project: ${{ github.event.repository.name }}
+          futureRelease: v${{ steps.get_version.outputs.version }}
